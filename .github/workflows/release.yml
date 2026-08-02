@@ -1,0 +1,44 @@
+name: Release
+
+# Manual CD pipeline: build and publish a "latest" release of the Rust
+# lib and all language bindings. Triggered by hand from the main branch.
+on:
+  workflow_dispatch:
+
+jobs:
+  # Rust core → crates.io
+  lib:
+    name: publish lib (crates.io)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: cargo publish (version bump + token via secrets)"'
+
+  # Language wrappers — all placeholders today, details TBD.
+  node:
+    name: publish node (npm)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: napi-rs build -> npm publish (bindings/node)"'
+
+  python:
+    name: publish python (PyPI)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: maturin build -> PyPI publish (bindings/python)"'
+
+  dotnet:
+    name: publish dotnet (NuGet)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: uniffi-bindgen-cs -> NuGet publish (bindings/dotnet)"'
+
+  go:
+    name: publish go (proxy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: cgo build + tag for Go proxy (bindings/go)"'

@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Rust core: fast feedback → validation → docs.
+  core:
+    name: core (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      # Fast feedback
+      - run: cargo fmt --check
+      - run: cargo check --all-targets --all-features
+      # Validation
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo test --all-targets --all-features
+      # Docs must build clean, too
+      - run: RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --all-features
+
+  # Supply chain: advisories + license policy (runs on PRs, pushes, and daily).
+  audit:
+    name: audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: EmbarkStudios/cargo-deny-action@v2
+
+  # Vendored OPS fixtures must track latest `main`.
+  fixtures:
+    name: OPS fixtures up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./scripts/update-fixtures.sh check
+
+  node:
+    name: node binding
+    needs: [core, audit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: napi-rs build + test (bindings/node)"'
+
+  python:
+    name: python binding
+    needs: [core, audit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: uniffi + maturin build + test (bindings/python)"'
+
+  dotnet:
+    name: dotnet binding
+    needs: [core, audit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: uniffi-bindgen-cs build + test (bindings/dotnet)"'
+
+  go:
+    name: go binding
+    needs: [core, audit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: 'echo "TODO: cgo build + test (bindings/go)"'
