@@ -7,7 +7,9 @@
 
 mod common;
 
-use common::fixtures::{get_all_ops_example_files, get_all_ops_fixture_files, fixture_paths_to_roundtrips_test_cases};
+use common::fixtures::{
+    fixture_paths_to_roundtrips_test_cases, get_all_ops_example_files, get_all_ops_fixture_files,
+};
 use common::run_test_cases::{run_roundtrip_fails, run_roundtrip_passes};
 
 #[test]

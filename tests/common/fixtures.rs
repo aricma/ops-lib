@@ -63,7 +63,10 @@ pub fn fixture_paths_to_roundtrips_test_cases(paths: Vec<PathBuf>) -> Vec<RoundT
         .into_iter()
         .map(|path| RoundTripTestCase {
             message: path.file_name().unwrap().to_str().unwrap().to_string(),
-            given: (fixture_path_to_format(&path), std::fs::read_to_string(&path).unwrap()),
+            given: (
+                fixture_path_to_format(&path),
+                std::fs::read_to_string(&path).unwrap(),
+            ),
         })
         .collect()
 }

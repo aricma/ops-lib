@@ -15,7 +15,7 @@ pub fn run_test_cases<G, E>(cases: &[TestCase<G, E>], check: impl Fn(&G, &E, &st
 /// The parse check: valid documents must parse (optionally into an
 /// exact model), invalid ones must reject with the expected error
 /// class.
-pub fn run_parse_cases(cases: &[TestCase<(Format, String), Expectation>]) {
+pub fn run_read_test_cases(cases: &[TestCase<(Format, String), Expectation>]) {
     run_test_cases(cases, |given, expected, message| match expected {
         Expectation::Model(model) => {
             assert_eq!(ops::read(given.0, &given.1).unwrap(), *model, "{message}")
