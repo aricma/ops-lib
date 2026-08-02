@@ -5,12 +5,69 @@ jobs in `.github/workflows/ci.yml` so you can run the same pipeline locally.
 Install `mask` with `cargo install mask` or `brew install mask`. For `audit`,
 install `cargo audit` and `cargo deny` first.
 
+## setup
+
+> Preflight: check every tool the repo needs, exit 1 with install
+> instructions when anything is missing. Run before `ci`.
+
+```bash
+MISSING=0
+need() {
+  if command -v "$1" >/dev/null 2>&1; then
+    echo "  ok    $1"
+  else
+    echo "  MISSING  $1"
+    MISSING=1
+  fi
+}
+hint() {
+  case "$1" in
+    cargo|rustc)      echo "  $1: install from https://rustup.rs";;
+    rustfmt|clippy)   echo "  $1: rustup component add $1";;
+    cargo-audit)      echo "  cargo-audit: cargo install cargo-audit";;
+    cargo-deny)       echo "  cargo-deny: cargo install --locked cargo-deny";;
+    node|npm)         echo "  $1: brew install node  (or https://nodejs.org)";;
+    uv)               echo "  uv: curl -LsSf https://astral.sh/uv/install.sh | sh";;
+    go)               echo "  go: brew install go  (or https://go.dev/dl)";;
+    gcc)              echo "  gcc: xcode-select --install  (macOS) / apt install build-essential";;
+    dotnet)           echo "  dotnet: brew install --cask dotnet  (https://dotnet.microsoft.com/download)";;
+  esac
+}
+
+echo "Core (Rust):"
+need cargo
+need rustc
+need rustfmt
+need cargo-clippy
+need cargo-audit
+need cargo-deny
+echo "Bindings:"
+need node
+need npm
+need uv
+need go
+need gcc
+need dotnet
+
+if [ "$MISSING" -ne 0 ]; then
+  echo
+  echo "Missing tools — install to continue:"
+  for t in cargo rustc rustfmt cargo-clippy cargo-audit cargo-deny node npm uv go gcc dotnet; do
+    command -v "$t" >/dev/null 2>&1 || hint "$t"
+  done
+  exit 1
+fi
+echo "All tools present."
+```
+
 ## ci
 
-> Run the full local pipeline in CI order: core, then audit, then bindings.
+> Preflight (setup), then the full local pipeline in CI order: core,
+> then audit, then bindings.
 
 ```bash
 set -e
+$MASK setup
 $MASK ci core
 $MASK ci audit
 $MASK ci bindings
