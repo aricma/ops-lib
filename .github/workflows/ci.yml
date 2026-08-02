@@ -10,6 +10,7 @@ jobs:
   # Rust core: fast feedback → validation → docs.
   core:
     name: core (${{ matrix.os }})
+    needs: [fixtures]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -29,9 +30,8 @@ jobs:
       # Docs must build clean, too
       - run: RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --all-features
 
-  # Supply chain: advisories + license policy (runs on PRs, pushes, and daily).
   audit:
-    name: audit
+    name: Security Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,9 +40,8 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - uses: EmbarkStudios/cargo-deny-action@v2
 
-  # Vendored OPS fixtures must track latest `main`.
   fixtures:
-    name: OPS fixtures up to date
+    name: OPS fixtures Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
