@@ -1,7 +1,6 @@
-# ops — Rust library for the Open Productivity Standard
+# ops-lib
 
-A Rust reader/writer for the [Open Productivity Standard (OPS)](https://github.com/aricma/open-productivity-standard),
-a local-first, repository-native format for tracking todos.
+A Rust reader/writer for the [Open Productivity Standard (OPS)](https://github.com/aricma/open-productivity-standard).
 
 > **Alpha.** Nothing is released yet. The standard itself is still at
 > version `0` and may change. Expect breakage — the API and the data
