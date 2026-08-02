@@ -7,9 +7,8 @@
 
 mod common;
 
-use common::{
-    example_files, fixture_files, fixture_roundtrips, run_roundtrip_fails, run_roundtrip_passes,
-};
+use common::fixtures::{example_files, fixture_files, fixture_roundtrips};
+use common::run_test_cases::{run_roundtrip_fails, run_roundtrip_passes};
 
 #[test]
 fn all_examples_roundtrip_to_an_identical_document() {
