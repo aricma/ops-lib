@@ -36,7 +36,9 @@ pub fn get_all_ops_fixture_files(kind: &str) -> Vec<PathBuf> {
     files_under(OPS_TESTS)
         .into_iter()
         .filter(|p| {
-            p.to_string_lossy().contains(&format!("/{kind}/"))
+            p.parent()
+                .and_then(|d| d.file_name())
+                .is_some_and(|n| n == kind)
                 && matches!(
                     p.extension().and_then(|e| e.to_str()),
                     Some("json" | "jsonl")
