@@ -7,9 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  # Rust core: fast feedback → validation → docs.
-  core:
-    name: core (${{ matrix.os }})
+  lib:
+    name: ops-lib (${{ matrix.os }})
     needs: [fixtures]
     runs-on: ${{ matrix.os }}
     strategy:
@@ -49,7 +48,7 @@ jobs:
 
   node:
     name: node binding
-    needs: [core, audit]
+    needs: [lib, audit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +56,7 @@ jobs:
 
   python:
     name: python binding
-    needs: [core, audit]
+    needs: [lib, audit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -65,7 +64,7 @@ jobs:
 
   dotnet:
     name: dotnet binding
-    needs: [core, audit]
+    needs: [lib, audit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +72,7 @@ jobs:
 
   go:
     name: go binding
-    needs: [core, audit]
+    needs: [lib, audit]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
