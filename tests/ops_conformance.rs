@@ -7,26 +7,30 @@
 
 mod common;
 
-use common::fixtures::{example_files, fixture_files, fixture_roundtrips};
+use common::fixtures::{get_all_ops_example_files, get_all_ops_fixture_files, fixture_paths_to_roundtrips_test_cases};
 use common::run_test_cases::{run_roundtrip_fails, run_roundtrip_passes};
 
 #[test]
 fn all_examples_roundtrip_to_an_identical_document() {
-    let cases = fixture_roundtrips(example_files());
-    assert_eq!(cases.len(), 10, "all example documents must be found");
+    let cases = fixture_paths_to_roundtrips_test_cases(get_all_ops_example_files());
+    assert_eq!(
+        cases.len(),
+        5,
+        "all supported example documents must be found"
+    );
     run_roundtrip_passes(&cases);
 }
 
 #[test]
 fn all_valid_fixtures_roundtrip_without_failing() {
-    let cases = fixture_roundtrips(fixture_files("valid"));
+    let cases = fixture_paths_to_roundtrips_test_cases(get_all_ops_fixture_files("valid"));
     assert_eq!(cases.len(), 23, "all valid fixtures must be found");
     run_roundtrip_passes(&cases);
 }
 
 #[test]
 fn all_invalid_fixtures_are_rejected_by_the_roundtrip() {
-    let cases = fixture_roundtrips(fixture_files("invalid"));
+    let cases = fixture_paths_to_roundtrips_test_cases(get_all_ops_fixture_files("invalid"));
     assert_eq!(cases.len(), 21, "all invalid fixtures must be found");
     run_roundtrip_fails(&cases);
 }

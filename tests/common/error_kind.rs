@@ -9,9 +9,6 @@ pub enum ErrorKind {
     SingleRoot,
     Json,
     Yaml,
-    Xml,
-    Csv,
-    Markdown,
 }
 
 impl From<&Error> for ErrorKind {
@@ -21,9 +18,6 @@ impl From<&Error> for ErrorKind {
             Error::SingleRootExpected(_) => ErrorKind::SingleRoot,
             Error::Json(_) => ErrorKind::Json,
             Error::Yaml(_) => ErrorKind::Yaml,
-            Error::Xml(_) => ErrorKind::Xml,
-            Error::Csv(_) => ErrorKind::Csv,
-            Error::Markdown(_) => ErrorKind::Markdown,
         }
     }
 }
