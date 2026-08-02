@@ -1,42 +1,42 @@
 {
-  "version": "0",
-  "id": "root",
   "title": "Full task model",
   "status": "open",
+  "id": "root",
+  "version": "0",
   "notes": "Root notes",
   "metadata": {
+    "active": true,
+    "count": 3,
+    "nested": {
+      "key": "value"
+    },
     "priority": "high",
     "tags": [
       "infra",
       "auth"
-    ],
-    "count": 3,
-    "active": true,
-    "nested": {
-      "key": "value"
-    }
+    ]
   },
   "subtasks": [
     {
-      "id": "child-1",
       "title": "Child one",
       "status": "done",
+      "id": "child-1",
       "notes": "Child notes",
       "metadata": {
         "estimate": 2
       },
       "subtasks": [
         {
-          "id": "grandchild",
           "title": "Grandchild",
-          "status": "open"
+          "status": "open",
+          "id": "grandchild"
         }
       ]
     },
     {
-      "id": "child-2",
       "title": "Child two",
-      "status": "open"
+      "status": "open",
+      "id": "child-2"
     }
   ]
 }

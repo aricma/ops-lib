@@ -27,8 +27,27 @@ pub fn run_read_test_cases(cases: &[TestCase<(Format, String), Expectation>]) {
     });
 }
 
-/// The write check: serializing a model and parsing it back must yield
-/// the expected model — the OPS lossless contract per format.
+/// The write check: writing the given model must produce exactly the
+/// expected characters — byte-stable output per format.
+pub fn run_write_test_cases(cases: &[TestCase<(Format, Task), String>]) {
+    run_test_cases(cases, |given, expected, message| {
+        let out = ops::write(given.0, std::slice::from_ref(&given.1)).unwrap();
+        assert_eq!(out, *expected, "{message}");
+    });
+}
+
+/// The write-error check: serializing an invalid model must fail with
+/// the expected error class.
+pub fn run_write_error_test_cases(cases: &[TestCase<(Format, Vec<Task>), ErrorKind>]) {
+    run_test_cases(cases, |given, expected, message| {
+        let err = ops::write(given.0, &given.1).unwrap_err();
+        assert_eq!(ErrorKind::from(&err), *expected, "{message}");
+    });
+}
+
+/// The write-roundtrip check: serializing a model and parsing it back
+/// must yield the expected model — the OPS lossless contract per
+/// format.
 pub fn run_write_roundtrip_cases(cases: &[TestCase<(Format, Task), Vec<Task>>]) {
     run_test_cases(cases, |given, expected, message| {
         let out = ops::write(given.0, std::slice::from_ref(&given.1)).unwrap();
