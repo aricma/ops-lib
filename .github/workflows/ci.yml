@@ -27,7 +27,9 @@ jobs:
       - run: cargo clippy --all-targets --all-features -- -D warnings
       - run: cargo test --all-targets --all-features
       # Docs must build clean, too
-      - run: RUSTDOCFLAGS="-D warnings" cargo doc --no-deps --all-features
+      - run: cargo doc --no-deps --all-features
+        env:
+          RUSTDOCFLAGS: "-D warnings"
 
   audit:
     name: Security Check
